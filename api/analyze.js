@@ -94,7 +94,7 @@ Absolute rules:
           model: 'llama-3.3-70b-versatile',
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.3,
-          max_tokens: 1500
+          max_tokens: 2500
         })
       }
     );
