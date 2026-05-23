@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScaryLetterHelp — What Does This Letter Mean?</title>
+<meta name="description" content="Got a scary letter? Paste it here and get a plain-English breakdown instantly. Free, no signup. Works for debt collection, medical bills, landlord notices, court summons.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2eb;
+    --red: #e63022;
+    --red-dark: #b52318;
+    --green: #1a7a4a;
+    --yellow: #f5c842;
+    --gray: #6b6b6b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    padding: 32px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .logo span { color: var(--red); }
+
+  .badge {
+    background: var(--red);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .hero {
+    padding: 64px 0 48px;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(230, 48, 34, 0.12);
+    border: 1px solid rgba(230, 48, 34, 0.3);
+    color: #ff6b5b;
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    letter-spacing: 0.04em;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--red);
+  }
+
+  .hero p {
+    font-size: 1.05rem;
+    color: #888;
+    font-weight: 300;
+    max-width: 520px;
+    margin: 0 auto 16px;
+    line-height: 1.6;
+  }
+
+  .trust-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .trust-item {
+    font-size: 0.78rem;
+    color: #4a4a4a;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .trust-item::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+  .tool-box {
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tool-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+  }
+
+  .textarea-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #555;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .letter-types {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .type-chip {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #222;
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .type-chip:hover {
+    border-color: var(--red);
+    color: var(--white);
+    background: rgba(230, 48, 34, 0.08);
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 220px;
+    background: #0d0d0d;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 16px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: var(--red); }
+  textarea::placeholder { color: #2e2e2e; }
+
+  /* Rate limit notice */
+  .rate-note {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: #3a3a3a;
+    text-align: right;
+  }
+
+  .analyze-btn {
+    width: 100%;
+    margin-top: 16px;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 18px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .analyze-btn:hover:not(:disabled) {
+    background: var(--red-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(230, 48, 34, 0.3);
+  }
+
+  .analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .analyze-btn .btn-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .error-box {
+    display: none;
+    background: rgba(230, 48, 34, 0.08);
+    border: 1px solid rgba(230, 48, 34, 0.25);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: #ff6b5b;
+    font-size: 0.88rem;
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+
+  .error-box.active { display: block; }
+
+  .loading {
+    display: none;
+    text-align: center;
+    padding: 40px 0 24px;
+  }
+
+  .loading.active { display: block; }
+
+  .loading-ring {
+    width: 36px;
+    height: 36px;
+    border: 2px solid #1e1e1e;
+    border-top-color: var(--red);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading p { color: #444; font-size: 0.88rem; }
+
+  .loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+  @keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+  }
+
+  .results {
+    display: none;
+    margin-top: 24px;
+    animation: fadeUp 0.4s ease;
+  }
+
+  .results.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .severity-badge {
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .severity-low { background: rgba(26,122,74,0.12); color: #4ade80; border: 1px solid rgba(26,122,74,0.25); }
+  .severity-medium { background: rgba(245,200,66,0.08); color: var(--yellow); border: 1px solid rgba(245,200,66,0.25); }
+  .severity-high { background: rgba(230,48,34,0.1); color: #ff6b5b; border: 1px solid rgba(230,48,34,0.25); }
+
+  .result-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .result-section {
+    margin-bottom: 12px;
+    background: #0d0d0d;
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 18px 20px;
+    border-left: 3px solid transparent;
+  }
+
+  .result-section.plain { border-left-color: #2a2a2a; }
+  .result-section.risks { border-left-color: var(--red); }
+  .result-section.action { border-left-color: var(--green); }
+  .result-section.negotiate { border-left-color: var(--yellow); }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .plain .section-label { color: #444; }
+  .risks .section-label { color: #ff6b5b; }
+  .action .section-label { color: #4ade80; }
+  .negotiate .section-label { color: var(--yellow); }
+
+  .section-content {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: #aaa;
+  }
+
+  .section-content ul { list-style: none; padding: 0; }
+
+  .section-content ul li {
+    padding: 5px 0 5px 16px;
+    position: relative;
+    border-bottom: 1px solid #141414;
+    font-size: 0.9rem;
+  }
+
+  .section-content ul li:last-child { border-bottom: none; }
+  .section-content ul li::before { position: absolute; left: 0; color: #333; }
+  .plain .section-content ul li::before { content: '→'; }
+  .risks .section-content ul li::before { content: '→'; color: var(--red); }
+  .action .section-content ul li::before { content: '✓'; color: var(--green); }
+  .negotiate .section-content ul li::before { content: '◆'; color: var(--yellow); font-size: 0.55rem; top: 9px; }
+
+  .reset-btn {
+    width: 100%;
+    margin-top: 14px;
+    background: transparent;
+    border: 1px solid #1e1e1e;
+    border-radius: 10px;
+    padding: 12px;
+    color: #444;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .reset-btn:hover { border-color: #333; color: #888; }
+
+  /* Sections below */
+  .how-section, .types-section {
+    padding: 36px 0;
+    border-top: 1px solid #141414;
+  }
+
+  .section-heading {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #333;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .step {
+    padding: 18px;
+    background: #0d0d0d;
+    border: 1px solid #141414;
+    border-radius: 12px;
+  }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.8rem;
+    color: #1a1a1a;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .step p { font-size: 0.78rem; color: #444; line-height: 1.5; }
+
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .type-card {
+    padding: 14px 16px;
+    background: #0d0d0d;
+    border: 1px solid #141414;
+    border-radius: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .type-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .type-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 2px; }
+  .type-desc { font-size: 0.72rem; color: #444; line-height: 1.4; }
+
+  .disclaimer {
+    background: #0d0d0d;
+    border: 1px solid #141414;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 0.73rem;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  footer {
+    padding: 28px 0;
+    border-top: 1px solid #141414;
+    text-align: center;
+  }
+
+  footer p { font-size: 0.75rem; color: #2a2a2a; line-height: 1.8; }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2rem; }
+    .tool-box { padding: 20px; }
+    .steps { grid-template-columns: 1fr; }
+    .types-grid { grid-template-columns: 1fr; }
+    .trust-row { gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo">Scary<span>Letter</span>Help</div>
+    <div class="badge">Free · No Signup</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-tag">⚠ 30-second letter decoder</div>
+    <h1>Got a <em>scary letter?</em><br>Find out what it means.</h1>
+    <p>Paste any confusing letter — debt collection, medical bill, landlord notice, court summons, insurance denial — and get a plain-English breakdown instantly.</p>
+    <div class="trust-row">
+      <span class="trust-item">No signup required</span>
+      <span class="trust-item">Nothing stored</span>
+      <span class="trust-item">100% free</span>
+    </div>
+  </section>
+
+  <div class="tool-box">
+    <label class="textarea-label">Paste your letter below</label>
+
+    <div class="letter-types">
+      <span class="type-chip" onclick="insertExample('debt')">📬 Debt collection</span>
+      <span class="type-chip" onclick="insertExample('medical')">🏥 Medical bill</span>
+      <span class="type-chip" onclick="insertExample('landlord')">🏠 Landlord notice</span>
+      <span class="type-chip" onclick="insertExample('court')">⚖️ Court summons</span>
+      <span class="type-chip" onclick="insertExample('insurance')">📋 Insurance denial</span>
+    </div>
+
+    <textarea id="letterText" placeholder="Paste the full text of your letter here...
+
+Example: 'THIS IS AN ATTEMPT TO COLLECT A DEBT. You owe $1,247.00 to...'
+
+The more text you paste, the better the analysis."></textarea>
+
+    <div class="rate-note" id="rateNote">Free · Powered by AI</div>
+
+    <button class="analyze-btn" onclick="analyzeLetter()" id="analyzeBtn">
+      <span class="btn-inner">
+        <span>🔍</span>
+        <span>Decode This Letter — Free</span>
+      </span>
+    </button>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <div class="loading" id="loading">
+      <div class="loading-ring"></div>
+      <p>Reading your letter<span class="loading-dots"></span></p>
+    </div>
+
+    <div class="results" id="results">
+      <div class="result-header">
+        <div class="severity-badge" id="severityBadge">Low Risk</div>
+        <div class="result-title" id="resultTitle">Letter Analysis</div>
+      </div>
+
+      <div class="result-section plain">
+        <div class="section-label">📄 What this letter actually means</div>
+        <div class="section-content" id="plainEnglish"></div>
+      </div>
+
+      <div class="result-section risks">
+        <div class="section-label">🚩 Red flags & risks</div>
+        <div class="section-content" id="redFlags"></div>
+      </div>
+
+      <div class="result-section action">
+        <div class="section-label">⚡ What you should do next</div>
+        <div class="section-content" id="nextSteps"></div>
+      </div>
+
+      <div class="result-section negotiate">
+        <div class="section-label">💡 Your rights & negotiation power</div>
+        <div class="section-content" id="rights"></div>
+      </div>
+
+      <button class="reset-btn" onclick="resetTool()">← Analyze another letter</button>
+    </div>
+  </div>
+
+  <section class="how-section">
+    <div class="section-heading">How it works</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Paste your letter</h3>
+        <p>Copy and paste the full text of any scary-looking official letter.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>AI reads it</h3>
+        <p>Our AI analyzes every clause, legal term, and hidden implication.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>You understand it</h3>
+        <p>Get plain-English breakdown, red flags, and exactly what to do.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="types-section">
+    <div class="section-heading">Works for all scary letters</div>
+    <div class="types-grid">
+      <div class="type-card">
+        <div class="type-icon">📬</div>
+        <div>
+          <div class="type-name">Debt Collection Notices</div>
+          <div class="type-desc">Find out if it's real, what they can legally do, and your FDCPA rights.</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon">🏥</div>
+        <div>
+          <div class="type-name">Medical Bills</div>
+          <div class="type-desc">Spot billing errors, understand what insurance should have covered.</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon">🏠</div>
+        <div>
+          <div class="type-name">Landlord & Eviction Notices</div>
+          <div class="type-desc">Know your tenant rights and how much time you actually have.</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon">⚖️</div>
+        <div>
+          <div class="type-name">Court Summons</div>
+          <div class="type-desc">Understand deadlines, requirements, and when to get legal help.</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon">📋</div>
+        <div>
+          <div class="type-name">Insurance Denials</div>
+          <div class="type-desc">Decode denial reasons and find out if you can appeal.</div>
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-icon">💳</div>
+        <div>
+          <div class="type-name">Credit & Bank Letters</div>
+          <div class="type-desc">Understand account actions, credit impacts, and your options.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Not legal advice.</strong> ScaryLetterHelp provides general information only. For serious legal matters, consult a qualified attorney. Your letter text is processed by AI and not stored or shared.
+  </div>
+
+  <footer>
+    <p>ScaryLetterHelp · Free forever · No account needed<br>
+    Built for people who got a scary letter and just want to understand it.</p>
+  </footer>
+</div>
+
+<script>
+// Simple client-side rate limiting (per session)
+let requestsThisSession = 0;
+const MAX_SESSION_REQUESTS = 5;
+
+const EXAMPLES = {
+  debt: `IMPORTANT NOTICE - ATTEMPT TO COLLECT A DEBT\n\nAccount Number: 7842-XXXX\nOriginal Creditor: Capital One Bank\nCurrent Balance: $1,847.23\nCollection Agency: Midland Credit Management\n\nThis letter is to inform you that the above referenced account has been placed with our office for collection. As of the date of this letter, you owe $1,847.23.\n\nUnless you notify this office within 30 days after receiving this notice that you dispute the validity of this debt or any portion thereof, this office will assume this debt is valid.\n\nTHIS COMMUNICATION IS FROM A DEBT COLLECTOR. THIS IS AN ATTEMPT TO COLLECT A DEBT.`,
+
+  medical: `PATIENT BILLING STATEMENT\n\nPatient: John Smith\nAccount #: MED-28847\nDate of Service: March 12, 2025\n\nDescription of Services:\n- Emergency Room Visit (Level 4): $4,200.00\n- CT Scan (Abdominal): $2,800.00\n- IV Medications: $340.00\n- Lab Work Panel: $680.00\n\nGross Charges: $8,020.00\nInsurance Payment: -$3,100.00\nInsurance Adjustment: -$1,920.00\nAMOUNT YOU OWE: $3,000.00\n\nPAYMENT DUE WITHIN 30 DAYS. Failure to pay may result in your account being sent to collections.`,
+
+  landlord: `NOTICE TO QUIT - PAY OR VACATE\n\nTo: Tenant(s) at 4821 Oak Street, Apt 2B\n\nYou are hereby notified that you are in default of your rental agreement for failure to pay rent in the amount of $1,400.00 which was due on the 1st of this month.\n\nYou must either:\n1. Pay the full amount of $1,400.00 within THREE (3) DAYS, OR\n2. Vacate and surrender possession of the premises.\n\nIf you fail to do either, legal proceedings will be initiated against you.`,
+
+  court: `CIVIL SUMMONS - DISTRICT COURT\n\nCase No: 2025-CV-004821\nPlaintiff: American Express National Bank\nDefendant: John Smith\n\nYou are hereby summoned to appear before this Court. A lawsuit has been filed against you.\n\nYou have 30 DAYS from the date of service of this summons to file a written response with the Court. If you fail to respond, a DEFAULT JUDGMENT may be entered against you for $6,234.00 plus interest and court costs.`,
+
+  insurance: `EXPLANATION OF BENEFITS - CLAIM DENIED\n\nClaim Number: INS-2025-88421\nDate of Service: April 3, 2025\n\nService Billed: Psychiatric Consultation - $450.00\nAmount Covered: $0.00\nYour Responsibility: $450.00\n\nDENIAL REASON: Non-covered charge. Service is not covered under your current plan.\n\nSecondary Reason: Prior authorization was required and not obtained.\n\nYou have the right to appeal this decision within 180 days.`
+};
+
+function insertExample(type) {
+  document.getElementById('letterText').value = EXAMPLES[type];
+}
+
+function showError(msg) {
+  const box = document.getElementById('errorBox');
+  box.textContent = '⚠ ' + msg;
+  box.classList.add('active');
+}
+
+function hideError() {
+  document.getElementById('errorBox').classList.remove('active');
+}
+
+function parseResponse(text) {
+  const sections = {
+    severity: 'MEDIUM',
+    title: 'Letter Analysis Complete',
+    plain: '',
+    risks: [],
+    action: [],
+    rights: []
+  };
+
+  const sevMatch = text.match(/SEVERITY[:\s]*(LOW|MEDIUM|HIGH)/i);
+  if (sevMatch) sections.severity = sevMatch[1].toUpperCase();
+
+  const titleMatch = text.match(/LETTER TYPE[:\s]*([^\n]+)/i);
+  if (titleMatch) sections.title = titleMatch[1].trim();
+
+  const plainMatch = text.match(/PLAIN ENGLISH[:\s]*\n?([\s\S]*?)(?=RED FLAGS|NEXT STEPS|YOUR RIGHTS|$)/i);
+  if (plainMatch) sections.plain = plainMatch[1].trim();
+
+  const risksMatch = text.match(/RED FLAGS[:\s]*\n?([\s\S]*?)(?=NEXT STEPS|YOUR RIGHTS|$)/i);
+  if (risksMatch) {
+    sections.risks = risksMatch[1].trim().split('\n')
+      .map(l => l.replace(/^[-•*→\d.]\s*/, '').trim())
+      .filter(l => l.length > 3);
+  }
+
+  const actionMatch = text.match(/(?:NEXT STEPS|WHAT YOU SHOULD DO)[:\s]*\n?([\s\S]*?)(?=YOUR RIGHTS|$)/i);
+  if (actionMatch) {
+    sections.action = actionMatch[1].trim().split('\n')
+      .map(l => l.replace(/^[-•*✓\d.]\s*/, '').trim())
+      .filter(l => l.length > 3);
+  }
+
+  const rightsMatch = text.match(/(?:YOUR RIGHTS|NEGOTIATION)[:\s]*\n?([\s\S]*?)$/i);
+  if (rightsMatch) {
+    sections.rights = rightsMatch[1].trim().split('\n')
+      .map(l => l.replace(/^[-•*◆\d.]\s*/, '').trim())
+      .filter(l => l.length > 3);
+  }
+
+  if (!sections.plain && !sections.risks.length) {
+    sections.plain = text;
+  }
+
+  return sections;
+}
+
+function renderList(items) {
+  if (!items || items.length === 0) return '<p style="color:#333;font-size:0.85rem">None identified.</p>';
+  return '<ul>' + items.map(i => `<li>${i}</li>`).join('') + '</ul>';
+}
+
+async function analyzeLetter() {
+  const text = document.getElementById('letterText').value.trim();
+
+  hideError();
+
+  if (!text) { showError('Please paste your letter text first.'); return; }
+  if (text.length < 50) { showError('Please paste more of the letter — need at least a few sentences.'); return; }
+
+  if (requestsThisSession >= MAX_SESSION_REQUESTS) {
+    showError('You\'ve used your free analyses for this session. Please come back later or refresh the page.');
+    return;
+  }
+
+  const btn = document.getElementById('analyzeBtn');
+  const loading = document.getElementById('loading');
+  const results = document.getElementById('results');
+
+  btn.disabled = true;
+  loading.classList.add('active');
+  results.classList.remove('active');
+
+  try {
+    const response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ letterText: text })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Something went wrong. Please try again.');
+    }
+
+    requestsThisSession++;
+    const remaining = MAX_SESSION_REQUESTS - requestsThisSession;
+    document.getElementById('rateNote').textContent =
+      remaining > 0 ? `${remaining} free ${remaining === 1 ? 'analysis' : 'analyses'} remaining` : 'Session limit reached';
+
+    const parsed = parseResponse(data.result);
+
+    const badge = document.getElementById('severityBadge');
+    badge.className = 'severity-badge';
+    if (parsed.severity === 'LOW') {
+      badge.classList.add('severity-low');
+      badge.textContent = '✓ Low Risk';
+    } else if (parsed.severity === 'HIGH') {
+      badge.classList.add('severity-high');
+      badge.textContent = '⚠ High Risk';
+    } else {
+      badge.classList.add('severity-medium');
+      badge.textContent = '◆ Medium Risk';
+    }
+
+    document.getElementById('resultTitle').textContent = parsed.title;
+    document.getElementById('plainEnglish').innerHTML = `<p>${parsed.plain}</p>`;
+    document.getElementById('redFlags').innerHTML = renderList(parsed.risks);
+    document.getElementById('nextSteps').innerHTML = renderList(parsed.action);
+    document.getElementById('rights').innerHTML = renderList(parsed.rights);
+
+    loading.classList.remove('active');
+    results.classList.add('active');
+
+  } catch (err) {
+    loading.classList.remove('active');
+    showError(err.message);
+  }
+
+  btn.disabled = false;
+}
+
+function resetTool() {
+  document.getElementById('results').classList.remove('active');
+  document.getElementById('letterText').value = '';
+  hideError();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
