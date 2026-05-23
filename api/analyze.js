@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Server configuration error. Please try again later.' });
   }
 
-  const prompt = `const prompt = `You are an expert document analyst who helps everyday people understand official letters, medical reports, legal notices, and formal documents. You read carefully, think critically, and give specific — never generic — analysis.
+  const prompt = `You are an expert document analyst who helps everyday people understand official letters, medical reports, legal notices, and formal documents. You read carefully, think critically, and give specific — never generic — analysis.
 
 STEP 1 — IDENTIFY THE DOCUMENT TYPE:
 First, silently classify the document into one of these categories:
@@ -48,38 +48,38 @@ For FINANCIAL: Identify exact amount owed, any acceleration clauses triggered, a
 STEP 3 — RESPOND IN THIS EXACT FORMAT (no extra commentary outside the format):
 
 SEVERITY: [LOW / MEDIUM / HIGH / URGENT]
-LETTER TYPE: [Specific name — e.g. "Urine Routine + Blood Glucose Lab Report" not just "Medical Report"]
+LETTER TYPE: [Specific name]
 
 PLAIN ENGLISH:
-[3-5 sentences. Be specific to THIS document. Name the actual values, actual deadlines, actual amounts. Never write vague summaries. Write as if explaining to a smart friend over the phone.]
+[3-5 sentences. Be specific to THIS document. Name the actual values, actual deadlines, actual amounts.]
 
 FINDINGS:
-[For medical reports: list EVERY parameter — name it, state the result, state NORMAL / BORDERLINE / ABNORMAL, explain in one plain sentence what it means. For letters: list every specific claim, charge, deadline, or demand found in the document.]
+[For medical reports: list EVERY parameter — name it, state the result, state NORMAL / BORDERLINE / ABNORMAL, explain in one plain sentence. For letters: list every specific claim, charge, deadline, or demand.]
 
 RED FLAGS:
-[ONLY list things that are actually concerning in this specific document. If something is genuinely fine, do not list it here. If there are no red flags, write exactly: "None identified." Be precise — name the exact clause, value, or language and explain WHY it matters.]
+[ONLY list things actually concerning in this document. If none, write: None identified.]
 
 GREEN FLAGS:
-[Only include this section if there are genuine positives. List things that are specifically reassuring or within normal range. Skip this section entirely if nothing applies.]
+[Only include if there are genuine positives. Skip entirely if nothing applies.]
 
 NEXT STEPS:
-[Numbered list, ordered by urgency. Be specific — include actual deadlines, actual amounts, actual contact info if mentioned in the document. Do not give generic advice without saying exactly why it applies here.]
+[Numbered list, ordered by urgency. Be specific — include actual deadlines, amounts, contact info from the document.]
 
 YOUR RIGHTS:
-[CRITICAL: Only include this section if legally relevant to this document. SKIP ENTIRELY for routine medical reports with no billing issues. For debt letters: include FDCPA rights. For evictions: include tenant rights. For insurance denials: include appeal rights. Never paste a generic rights boilerplate — only what directly applies to this specific document.]
+[Only include if legally relevant. Skip entirely for routine medical reports. Only include what directly applies to this document.]
 
 Document to analyze:
 ---
-\${letterText.slice(0, 4000)}
+${letterText.slice(0, 4000)}
 ---
 
 Absolute rules:
-- Reference actual numbers, dates, names, and values from the document — never speak in abstractions.
-- Never give the same response regardless of document type. The format adapts to what the document actually is.
-- If a medical value is abnormal, say so clearly. Do not soften significant abnormalities.
-- If everything is genuinely fine, say so confidently and briefly — do not pad the response.
-- Omit any section that does not apply to this specific document.
-- Do not be alarmist, but do not be falsely reassuring. Be accurate above all.`;`;
+- Reference actual numbers, dates, names, and values from the document.
+- Never give the same response regardless of document type.
+- If a medical value is abnormal, say so clearly.
+- If everything is fine, say so confidently and briefly.
+- Omit any section that does not apply.
+- Do not be alarmist, but do not be falsely reassuring. Be accurate above all.`;
 
   try {
     const response = await fetch(
@@ -100,8 +100,8 @@ Absolute rules:
     );
 
     if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.error?.message || 'AI service error');
+      const errText = await response.text();
+      throw new Error(errText || 'AI service error');
     }
 
     const data = await response.json();
